@@ -9,6 +9,8 @@
 char *argv0;
 char *user;
 
+void ttyinit(void);
+
 extern int errfmt(Fmt*);
 void
 sizebug(void)
@@ -40,18 +42,14 @@ main(int argc, char **argv)
 	osinit();
 	procinit0();
 	printinit();
-	screeninit();
 
 	chandevreset();
 	chandevinit();
 	quotefmtinstall();
+	ttyinit();
 
 	if(bind("#c", "/dev", MBEFORE) < 0)
 		panic("bind #c: %r");
-	if(bind("#m", "/dev", MBEFORE) < 0)
-		panic("bind #m: %r");
-	if(bind("#i", "/dev", MBEFORE) < 0)
-		panic("bind #i: %r");
 	if(bind("#I", "/net", MBEFORE) < 0)
 		panic("bind #I: %r");
 	if(bind("#U", "/", MAFTER) < 0)
@@ -124,3 +122,28 @@ findkey(char **puser, char *dom)
 	return nil;
 }
 
+#undef read
+#undef write
+#undef system
+
+void
+ttyputs(char *s, int n)
+{
+	write(1, s, n);
+}
+
+void
+ttyreader(void *arg)
+{
+	char c;
+
+	while(read(0, &c, 1) == 1)
+		kbdputc(kbdq, c&0xff);
+}
+
+void
+ttyinit(void)
+{
+	screenputs = ttyputs;
+	kproc("tty", ttyreader, 0);
+}

@@ -9,8 +9,6 @@ extern Dev rootdevtab;
 extern Dev pipedevtab;
 extern Dev ssldevtab;
 extern Dev tlsdevtab;
-extern Dev mousedevtab;
-extern Dev drawdevtab;
 extern Dev ipdevtab;
 extern Dev fsdevtab;
 extern Dev mntdevtab;
@@ -23,8 +21,6 @@ Dev *devtab[] = {
 	&pipedevtab,
 	&ssldevtab,
 	&tlsdevtab,
-	&mousedevtab,
-	&drawdevtab,
 	&ipdevtab,
 	&fsdevtab,
 	&mntdevtab,

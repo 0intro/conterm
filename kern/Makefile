@@ -11,13 +11,11 @@ OFILES=\
 	devaudio.$O\
 	devaudio-$(AUDIO).$O\
 	devcons.$O\
-	devdraw.$O\
 	devfs-$(OS).$O\
 	devip.$O\
 	devip-$(OS).$O\
 	devlfd.$O\
 	devmnt.$O\
-	devmouse.$O\
 	devpipe.$O\
 	devroot.$O\
 	devssl.$O\
@@ -35,7 +33,6 @@ OFILES=\
 	sysproc.$O\
 	qio.$O\
 	qlock.$O\
-	term.$O\
 	uart.$O\
 	waserror.$O\
 	$(OS).$O

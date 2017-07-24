@@ -18,10 +18,6 @@ LIBS1=\
 	libauthsrv/libauthsrv.a\
 	libsec/libsec.a\
 	libmp/libmp.a\
-	libmemdraw/libmemdraw.a\
-	libmemlayer/libmemlayer.a\
-	libdraw/libdraw.a\
-	gui-$(GUI)/libgui.a\
 	libc/libc.a\
 	libip/libip.a\
 
@@ -56,20 +52,8 @@ libmp/libmp.a:
 libsec/libsec.a:
 	(cd libsec; $(MAKE))
 
-libmemdraw/libmemdraw.a:
-	(cd libmemdraw; $(MAKE))
-
-libmemlayer/libmemlayer.a:
-	(cd libmemlayer; $(MAKE))
-
-libdraw/libdraw.a:
-	(cd libdraw; $(MAKE))
-
 libc/libc.a:
 	(cd libc; $(MAKE))
 
 libip/libip.a:
 	(cd libip; $(MAKE))
-
-gui-$(GUI)/libgui.a:
-	(cd gui-$(GUI); $(MAKE))

@@ -466,7 +466,6 @@ enum{
 	Qreboot,
 	Qsecstore,
 	Qshowfile,
-	Qsnarf,
 	Qswap,
 	Qsysname,
 	Qsysstat,
@@ -500,7 +499,6 @@ static Dirtab consdir[]={
 	"reboot",	{Qreboot},	0,		0664,
 	"secstore",	{Qsecstore},	0,		0666,
 	"showfile",	{Qshowfile},	0,	0220,
-	"snarf",	{Qsnarf},		0,		0666,
 	"swap",		{Qswap},	0,		0664,
 	"sysname",	{Qsysname},	0,		0664,
 	"sysstat",	{Qsysstat},	0,		0666,
@@ -511,7 +509,6 @@ static Dirtab consdir[]={
 
 char secstorebuf[65536];
 Dirtab *secstoretab = &consdir[Qsecstore];
-Dirtab *snarftab = &consdir[Qsnarf];
 
 int
 readnum(ulong off, char *buf, ulong n, ulong val, int size)
@@ -611,15 +608,6 @@ consopen(Chan *c, int omode)
 		if(omode != OREAD)
 			memset(secstorebuf, 0, sizeof secstorebuf);
 		break;
-
-	case Qsnarf:
-		if(omode == ORDWR)
-			error(Eperm);
-		if(omode == OREAD)
-			c->aux = strdup("");
-		else
-			c->aux = mallocz(SnarfSize, 1);
-		break;
 	}
 	return c;
 }
@@ -644,12 +632,6 @@ consclose(Chan *c)
 			kprintinuse = 0;
 			qhangup(kprintoq, nil);
 		}
-		break;
-
-	case Qsnarf:
-		if(c->mode == OWRITE)
-			clipwrite(c->aux);
-		free(c->aux);
 		break;
 	}
 }
@@ -755,15 +737,6 @@ consread(Chan *c, void *buf, long n, vlong off)
 
 	case Qnull:
 		return 0;
-
-	case Qsnarf:
-		if(offset == 0){
-			free(c->aux);
-			c->aux = clipread();
-		}
-		if(c->aux == nil)
-			return 0;
-		return readstr(offset, buf, n, c->aux);
 
 	case Qsecstore:
 		return readstr(offset, buf, n, secstorebuf);
@@ -924,13 +897,6 @@ conswrite(Chan *c, void *va, long n, vlong off)
 
 	case Qshowfile:
 		return showfilewrite(a, n);
-
-	case Qsnarf:
-		if(offset >= SnarfSize || offset+n >= SnarfSize)
-			error(Etoobig);
-		snarftab->qid.vers++;
-		memmove((uchar*)c->aux+offset, va, n);
-		return n;
 
 	case Qsysstat:
 		n = 0;
