@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/0intro/drawterm.svg?branch=master)](https://travis-ci.org/0intro/drawterm)
+[![Build Status](https://github.com/0intro/conterm/workflows/C/badge.svg)](https://github.com/0intro/conterm/actions/workflows/c.yml)
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/drawterm/badge.svg)](https://scan.coverity.com/projects/drawterm)
 
 INSTALLATION
